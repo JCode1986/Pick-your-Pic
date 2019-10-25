@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Image, Button, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default class App extends React.Component {
 
@@ -11,8 +12,28 @@ export default class App extends React.Component {
     }
   }
 
+  // componentDidMount() {
+  //   return fetch('https://dog.ceo/api/breeds/image/random')
+  //   .then((response) => response.json())
+  //   .then((responseJson) => {
+      
+  //     this.setState({
+  //       isLoading: false,
+  //       dataSource: responseJson.message,
+  //     })
+  //   })
+
+  //   .catch((error) => {
+  //     console.log(error)
+  //   });
+  // }
+
   componentDidMount() {
-    return fetch('https://dog.ceo/api/breeds/image/random')
+    this.fetchImage()
+  }
+
+  fetchImage() {
+    fetch('https://dog.ceo/api/breeds/image/random')
     .then((response) => response.json())
     .then((responseJson) => {
       
@@ -27,6 +48,8 @@ export default class App extends React.Component {
     });
   }
 
+
+
   render() {
 
     if(this.state.isLoading) {
@@ -40,11 +63,22 @@ export default class App extends React.Component {
 
       return (
         <View style={styles.container}>
-          <Text>it works!!</Text>
-          <Image
-          style={styles.images}
-          source={{uri: this.state.dataSource }}
+        <LinearGradient
+          colors={['rgba(0,0,0,0.8)', 'transparent']}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            height: 300,
+          }}
         />
+          <Text style={styles.text}>Tap Image for Random Doggos</Text>
+          <View>
+          <TouchableOpacity onPress={() => this.fetchImage()}>
+              <Image style={styles.images} source={{uri: this.state.dataSource }} />
+          </TouchableOpacity>
+          </View>
         </View>
       );
     }
@@ -54,12 +88,17 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'orange',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text: {
+    fontSize: 20,
+    color: 'teal'
+  },
   images: {
-    width: 501,
-    height: 500
-  }
+    width: 350,
+    height: 350,
+    borderRadius: 50
+  }, 
 });
